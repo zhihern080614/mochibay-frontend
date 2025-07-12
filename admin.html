@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mochibay Admin Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-color: #bcaaa4;
+        --primary-color-dark: #8d7b71;
+        --background-color: #f5f5f5;
+        --surface-color: #ffffff;
+        --text-color: #5d4037;
+        --heading-color: #3e2723;
+        --border-color: #e0e0e0;
+        --danger-color: #c62828;
+        --danger-color-dark: #b71c1c;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        padding: 2rem;
+        background-color: var(--background-color);
+        color: var(--text-color);
+      }
+      h1,
+      h2 {
+        color: var(--heading-color);
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+      #login-section,
+      #admin-panel {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        background-color: var(--surface-color);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+      #admin-panel {
+        display: none;
+        max-width: 1200px;
+      }
+      .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+      input {
+        width: 100%;
+        padding: 0.8rem;
+        margin-bottom: 1rem;
+        box-sizing: border-box;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 1rem;
+      }
+      button {
+        padding: 0.8rem 1.5rem;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 8px;
+        margin-right: 10px;
+        font-weight: 500;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: var(--primary-color-dark);
+      }
+      .logout {
+        background-color: var(--danger-color);
+      }
+      .logout:hover {
+        background-color: var(--danger-color-dark);
+      }
+      .tabs {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1.5rem;
+        font-size: 0.9rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      th,
+      td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+      }
+      th {
+        background-color: #fafafa;
+        color: var(--heading-color);
+        font-weight: 600;
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      tr:hover {
+        background-color: #f8f6f5;
+      }
+      #data-container.grid-view {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1.5rem;
+      }
+      .order-card {
+        background-color: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+      }
+      .order-card-content {
+        flex-grow: 1; /* 让内容区域占据大部分空间 */
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .order-card-header {
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 1rem;
+        margin-bottom: 0;
+      }
+      .order-card-header h4 {
+        margin: 0;
+        color: var(--heading-color);
+        font-size: 1.2rem;
+      }
+      .order-card-header span {
+        font-size: 0.8rem;
+        color: #999;
+      }
+      .order-card-details,
+      .order-card-customer {
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+      .order-card-details strong,
+      .order-card-customer strong {
+        color: var(--heading-color);
+        min-width: 80px;
+        display: inline-block;
+      }
+      .order-items-list {
+        list-style: none;
+        padding: 0;
+        margin-top: 0.5rem;
+        border-top: 1px dashed var(--border-color);
+        padding-top: 0.5rem;
+      }
+      .order-items-list li {
+        display: flex;
+        justify-content: space-between;
+      }
+      .order-total {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-color);
+        text-align: right;
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+      .order-card-details .items-title {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--heading-color);
+        font-weight: 600;
+      }
+      .order-card-receipt,
+      .order-card-notes {
+        font-size: 0.9rem;
+        padding-top: 1rem;
+        margin-top: 1rem;
+        border-top: 1px dashed var(--border-color);
+      }
+      .order-card-receipt a {
+        color: var(--primary-color);
+        text-decoration: none;
+      }
+      .order-card-receipt a:hover {
+        text-decoration: underline;
+      }
+      .order-card-notes {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      /* --- 新增：订单卡片操作按钮样式 --- */
+      .order-card-actions {
+        margin-top: auto; /* 将按钮推到底部 */
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        justify-content: flex-end; /* 按钮靠右 */
+      }
+      .delete-btn {
+        background-color: var(--danger-color);
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+      }
+      .delete-btn:hover {
+        background-color: var(--danger-color-dark);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="login-section">
+      <h1>Mochibay Admin</h1>
+      <input type="email" id="admin-email" placeholder="Email" />
+      <input type="password" id="admin-password" placeholder="Password" />
+      <button onclick="adminLogin()">Login</button>
+      <p id="login-error" style="color: red; text-align: center"></p>
+    </div>
+
+    <div id="admin-panel">
+      <div class="admin-header">
+        <h2>Admin Dashboard</h2>
+        <button class="logout" onclick="adminLogout()">Logout</button>
+      </div>
+      <div class="tabs">
+        <button onclick="fetchUsers()">View Users</button>
+        <button onclick="fetchOrders()">View Orders</button>
+      </div>
+      <div id="data-container"></div>
+    </div>
+
+    <script>
+      const API_URL = "http://localhost:3000";
+      const dataContainer = document.getElementById("data-container");
+
+      function adminLogin() {
+        const email = document.getElementById("admin-email").value;
+        const password = document.getElementById("admin-password").value;
+        const errorP = document.getElementById("login-error");
+        errorP.textContent = "";
+
+        fetch(`${API_URL}/api/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.token && data.role === "admin") {
+              localStorage.setItem("adminToken", data.token);
+              document.getElementById("login-section").style.display = "none";
+              document.getElementById("admin-panel").style.display = "block";
+              fetchOrders();
+            } else {
+              errorP.textContent =
+                data.message || "Login failed or not an admin account.";
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            errorP.textContent = "An error occurred.";
+          });
+      }
+
+      function adminLogout() {
+        localStorage.removeItem("adminToken");
+        document.getElementById("login-section").style.display = "block";
+        document.getElementById("admin-panel").style.display = "none";
+        dataContainer.innerHTML = "";
+      }
+
+      async function fetchData(endpoint) {
+        const token = localStorage.getItem("adminToken");
+        try {
+          const response = await fetch(`${API_URL}${endpoint}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (response.status === 401 || response.status === 403) {
+            alert("Session expired or unauthorized. Please log in again.");
+            adminLogout();
+            return null;
+          }
+          return await response.json();
+        } catch (error) {
+          console.error("Fetch error:", error);
+          alert("Failed to fetch data.");
+          return null;
+        }
+      }
+
+      async function fetchUsers() {
+        const users = await fetchData("/api/admin/users");
+        if (!users) return;
+        dataContainer.className = "table-view";
+        let tableHTML = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Class</th>
+                        <th>Role</th>
+                        <th>Registered At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${users
+                      .map(
+                        (user) => `
+                        <tr>
+                            <td>${user.id}</td>
+                            <td>${user.name}</td>
+                            <td>${user.email}</td>
+                            <td>${user.phone || "N/A"}</td>
+                            <td>${user.user_class || "N/A"}</td>
+                            <td>${user.role}</td>
+                            <td>${new Date(
+                              user.created_at
+                            ).toLocaleString()}</td>
+                        </tr>
+                    `
+                      )
+                      .join("")}
+                </tbody>
+            </table>
+        `;
+        dataContainer.innerHTML = tableHTML;
+      }
+
+      async function fetchOrders() {
+        const orders = await fetchData("/api/admin/orders");
+        if (!orders) return;
+
+        dataContainer.className = "grid-view";
+        let cardsHTML = orders
+          .map((order) => {
+            let itemsList = "";
+            try {
+              const items = JSON.parse(order.order_details);
+              itemsList = items
+                .map(
+                  (item) => `
+                    <li>
+                        <span>${item.name} x ${item.quantity}</span>
+                        <span>RM ${(item.price * item.quantity).toFixed(
+                          2
+                        )}</span>
+                    </li>
+                `
+                )
+                .join("");
+            } catch (e) {
+              itemsList = "<li>Error parsing items.</li>";
+            }
+
+            let receiptLink = "";
+            const receiptRegex = /\[Receipt: (.+)\]/;
+            let cleanNotes = order.notes || "";
+
+            if (order.notes) {
+              const match = order.notes.match(receiptRegex);
+              if (match && match[1]) {
+                const filePath = match[1];
+                receiptLink = `
+                        <div class="order-card-receipt">
+                            <strong>Receipt:</strong> 
+                            <a href="${API_URL}${filePath}" target="_blank" rel="noopener noreferrer">View Receipt</a>
+                        </div>
+                    `;
+                cleanNotes = order.notes.replace(receiptRegex, "").trim();
+              }
+            }
+
+            return `
+                <div class="order-card">
+                  <div class="order-card-content">
+                    <div class="order-card-header">
+                        <h4>Order #${order.order_number}</h4>
+                        <span>${new Date(
+                          order.created_at
+                        ).toLocaleString()}</span>
+                    </div>
+                    <div class="order-card-customer">
+                        <div><strong>Customer:</strong> ${
+                          order.customer_name
+                        }</div>
+                        <div><strong>Class:</strong> ${order.user_class}</div>
+                        <div><strong>Phone:</strong> ${order.user_phone}</div>
+                    </div>
+                    <div class="order-card-details">
+                        <strong class="items-title">Items Ordered:</strong>
+                        <ul class="order-items-list">${itemsList}</ul>
+                        <div class="order-total">
+                            <span>Total:</span>
+                            <span>RM ${parseFloat(order.total_amount).toFixed(
+                              2
+                            )}</span>
+                        </div>
+                    </div>
+                    ${receiptLink}
+                    ${
+                      cleanNotes
+                        ? `<div class="order-card-notes"><strong>Notes:</strong> ${cleanNotes}</div>`
+                        : ""
+                    }
+                  </div>
+                  <div class="order-card-actions">
+                    <button class="delete-btn" onclick="deleteOrder(${
+                      order.id
+                    }, '${order.order_number}')">Delete</button>
+                  </div>
+                </div>
+            `;
+          })
+          .join("");
+
+        dataContainer.innerHTML = cardsHTML || "<p>No orders found.</p>";
+      }
+
+      // --- 新增：删除订单的 JavaScript 函数 ---
+      async function deleteOrder(orderId, orderNumber) {
+        const confirmation = confirm(
+          `Are you sure you want to delete Order #${orderNumber}? This action cannot be undone.`
+        );
+
+        if (!confirmation) {
+          return; // 如果用户取消，则不执行任何操作
+        }
+
+        const token = localStorage.getItem("adminToken");
+
+        try {
+          const response = await fetch(
+            `${API_URL}/api/admin/orders/${orderId}`,
+            {
+              method: "DELETE",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (response.ok) {
+            alert(`Order #${orderNumber} has been deleted successfully.`);
+            fetchOrders(); // 重新加载订单列表以反映删除
+          } else {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Failed to delete order.");
+          }
+        } catch (error) {
+          console.error("Delete order error:", error);
+          alert(`Error: ${error.message}`);
+        }
+      }
+
+      if (localStorage.getItem("adminToken")) {
+        document.getElementById("login-section").style.display = "none";
+        document.getElementById("admin-panel").style.display = "block";
+        fetchOrders();
+      }
+    </script>
+  </body>
+</html>

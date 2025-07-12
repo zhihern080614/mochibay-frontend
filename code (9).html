@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- ... (你的 head 部分保持不变) ... -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mochibay</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        /* Morandi Color Palette */
+        --primary-color: #bcaaa4; /* Dusty Rose / Light Taupe */
+        --primary-color-dark: #8d7b71;
+        --secondary-color: #66bb6a; /* Vivid Green */
+        --secondary-color-dark: #4caf50;
+        --background-color: #f5f5f5; /* Light Warm Grey */
+        --surface-color: #ffffff; /* Card and modal backgrounds */
+        --text-color: #5d4037; /* Taupe Gray */
+        --heading-color: #3e2723; /* Dark Brown */
+        --border-color: #e0e0e0; /* Subtle borders */
+        --font-primary: "Poppins", sans-serif;
+        --font-secondary: "Playfair Display", serif; /* For decorative headings */
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: var(--font-primary);
+        background-color: var(--background-color);
+        color: var(--text-color);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      /* Navbar */
+      .navbar {
+        background: var(--surface-color);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        padding: 1rem 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        transition: background-color 0.3s;
+      }
+
+      .navbar-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .logo-section {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .logo {
+        color: var(--heading-color);
+        font-size: 1.8rem;
+        font-weight: 700;
+        font-family: var(--font-primary);
+      }
+
+      .logo-section img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+
+      .nav-buttons {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .nav-btn {
+        padding: 0.6rem 1.2rem;
+        border: 2px solid transparent;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .cart-icon-wrapper {
+        position: relative;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+      }
+
+      .cart-icon {
+        width: 28px;
+        height: 28px;
+        color: var(--text-color);
+      }
+
+      #cart-badge {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border: 2px solid var(--surface-color);
+      }
+
+      .btn-primary {
+        background: var(--primary-color);
+        color: white;
+      }
+      .btn-primary:hover {
+        background: var(--primary-color-dark);
+        transform: translateY(-2px);
+      }
+
+      .btn-outline {
+        background: transparent;
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+      }
+      .btn-outline:hover {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      /* Hero Section */
+      .hero {
+        background: var(--primary-color);
+        color: white;
+        text-align: center;
+        padding: 6rem 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .hero h1 {
+        font-family: var(--font-secondary);
+        font-size: 4rem;
+        font-style: italic;
+        margin-bottom: 1rem;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+        max-width: 600px;
+      }
+
+      /* Menu Section */
+      .menu-section {
+        padding: 4rem 2rem;
+      }
+
+      .menu-title {
+        font-family: var(--font-secondary);
+        font-size: 2.5rem;
+        text-align: center;
+        margin-bottom: 3rem;
+        color: var(--heading-color);
+      }
+
+      .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .menu-item {
+        background: var(--surface-color);
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .menu-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      /* --- FINAL IMAGE STYLE FIX --- */
+      .menu-item img {
+        width: 100%;
+        height: 180px; /* A more balanced height */
+        object-fit: contain; /* This will fit the entire image inside, without cropping */
+        background-color: #f8f9fa; /* A very light background for any empty space */
+        padding: 10px; /* Add some padding around the contained image */
+      }
+
+      .menu-item-content {
+        padding: 1.5rem;
+      }
+
+      .menu-item-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--heading-color);
+      }
+
+      .menu-item-description {
+        font-size: 0.9rem;
+        color: var(--text-color);
+        opacity: 0.8;
+        margin-bottom: 1rem;
+        min-height: 40px;
+      }
+
+      .menu-item-price {
+        color: var(--secondary-color);
+        font-weight: 700;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+      }
+
+      .add-to-cart {
+        background: var(--secondary-color);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: background-color 0.3s;
+      }
+
+      .add-to-cart:hover {
+        background: var(--secondary-color-dark);
+      }
+
+      /* Cart */
+      .cart {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none; /* Hidden by default */
+        justify-content: center;
+        align-items: center;
+        z-index: 1001;
+      }
+
+      .cart-container {
+        position: relative;
+        width: 90%;
+        max-width: 800px;
+        height: 90%;
+        background: var(--surface-color);
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .cart-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .cart-header h3 {
+        font-size: 1.5rem;
+        font-family: var(--font-secondary);
+      }
+
+      .cart-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0 1.5rem;
+      }
+
+      .cart-footer {
+        padding: 1.5rem;
+        background: var(--surface-color);
+        border-top: 1px solid var(--border-color);
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+      }
+
+      .cart-section {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .cart-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 0.75rem;
+        font-weight: 500;
+        color: var(--heading-color);
+      }
+
+      .form-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 1rem;
+        font-family: var(--font-primary);
+        transition: border-color 0.3s, box-shadow 0.3s;
+        background-color: transparent;
+      }
+
+      .form-group label {
+        position: absolute;
+        top: 50%;
+        left: 0.8rem;
+        transform: translateY(-50%);
+        background: var(--surface-color);
+        padding: 0 0.25rem;
+        color: #999;
+        transition: all 0.2s ease-in-out;
+        pointer-events: none;
+      }
+
+      .form-group input:focus + label,
+      .form-group input:not(:placeholder-shown) + label {
+        top: 0;
+        left: 0.6rem;
+        font-size: 0.8rem;
+        color: var(--primary-color);
+      }
+
+      .form-group input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(188, 170, 164, 0.2);
+      }
+
+      .error-message {
+        color: var(--primary-color);
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+        min-height: 1rem;
+      }
+
+      .form-group.error input {
+        border-color: var(--primary-color);
+      }
+
+      .form-select,
+      .form-textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 1rem;
+        font-family: var(--font-primary);
+        transition: border-color 0.3s, box-shadow 0.3s;
+      }
+      .form-select:focus,
+      .form-textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(188, 170, 164, 0.2);
+      }
+
+      .form-textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+
+      .order-type-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .order-type-btn {
+        padding: 0.75rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .order-type-btn.active {
+        background: var(--secondary-color);
+        color: white;
+        border-color: var(--secondary-color);
+      }
+
+      .close-cart {
+        position: absolute;
+        top: 1rem;
+        right: 1.5rem;
+        background: none;
+        border: none;
+        font-size: 2rem;
+        cursor: pointer;
+        color: #999;
+        transition: color 0.3s;
+      }
+      .close-cart:hover {
+        color: var(--primary-color);
+      }
+
+      .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .quantity-btn {
+        width: 30px;
+        height: 30px;
+        border: 1px solid var(--border-color);
+        border-radius: 50%;
+        background: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: var(--text-color);
+        transition: background-color 0.3s, color 0.3s;
+      }
+      .quantity-btn:hover {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .quantity-display {
+        min-width: 25px;
+        text-align: center;
+        font-weight: 600;
+      }
+
+      .auth-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+
+      .auth-modal.show {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 1;
+      }
+
+      .auth-modal-content {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 420px;
+        transform: scale(0.9);
+        opacity: 0;
+        transition: all 0.3s ease-in-out;
+        position: relative; /* Needed for close button */
+      }
+
+      .auth-modal.show .auth-modal-content {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      .auth-header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+      .auth-header h2 {
+        font-family: var(--font-secondary);
+        font-size: 2rem;
+      }
+
+      .close-modal {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: none;
+        border: none;
+        font-size: 1.8rem;
+        cursor: pointer;
+        color: #999;
+      }
+
+      .auth-button {
+        width: 100%;
+        padding: 0.8rem;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: background-color 0.3s, color 0.3s;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .auth-button:hover {
+        background: var(--primary-color-dark);
+      }
+      .auth-button.loading {
+        background: var(--primary-color-dark);
+        color: rgba(255, 255, 255, 0.7);
+        cursor: not-allowed;
+      }
+      .auth-button .spinner {
+        display: none;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      .auth-button.loading .spinner {
+        display: block;
+      }
+      .auth-button.loading .button-text {
+        opacity: 0;
+      }
+      .auth-button .spinner {
+        position: absolute;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .payment-methods {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      .payment-method {
+        position: relative;
+      }
+
+      .payment-method input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+      }
+
+      .payment-method label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        background-color: #fff;
+        height: 100px;
+      }
+
+      .payment-method label img {
+        height: 30px;
+        margin-bottom: 0.5rem;
+        object-fit: contain;
+      }
+
+      .payment-method label span {
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+
+      .payment-method input[type="radio"]:checked + label {
+        border-color: var(--primary-color);
+        background-color: #f8f6f5;
+        box-shadow: 0 0 0 2px var(--primary-color);
+      }
+
+      .auth-switch {
+        text-align: center;
+        margin-top: 1.5rem;
+        color: var(--text-color);
+        opacity: 0.8;
+      }
+
+      .auth-switch a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .auth-switch a:hover {
+        text-decoration: underline;
+      }
+
+      /* User Profile */
+      .user-profile {
+        position: relative;
+      }
+
+      .profile-trigger {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+        padding: 0.25rem;
+        border-radius: 50px;
+        transition: background-color 0.3s;
+      }
+      .profile-trigger:hover {
+        background: #f3f4f6;
+      }
+
+      .profile-image {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--primary-color);
+      }
+
+      .profile-name {
+        color: var(--heading-color);
+        font-weight: 500;
+      }
+
+      .profile-menu {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        width: 220px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        padding: 0.5rem 0;
+        display: none;
+        z-index: 100;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.3s, transform 0.3s;
+      }
+
+      .profile-menu.show {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .profile-menu-item {
+        padding: 0.75rem 1.5rem;
+        cursor: pointer;
+        color: var(--text-color);
+        transition: background-color 0.3s, color 0.3s;
+      }
+      .profile-menu-item:hover {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      /* Footer */
+      .footer {
+        background: #1a1a1a;
+        color: #ccc;
+        padding: 4rem 2rem 2rem;
+        margin-top: 4rem;
+      }
+      .footer-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #444;
+      }
+      .footer-about h3,
+      .footer-links h3,
+      .footer-contact h3 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        color: white;
+        font-family: var(--font-secondary);
+      }
+      .footer-about p {
+        font-size: 0.9rem;
+        line-height: 1.7;
+      }
+      .footer-links ul {
+        list-style: none;
+      }
+      .footer-links a {
+        color: #ccc;
+        text-decoration: none;
+        transition: color 0.3s;
+        font-size: 0.9rem;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+      .footer-links a:hover {
+        color: var(--primary-color);
+      }
+      .footer-contact p {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+      .footer-bottom {
+        text-align: center;
+        padding-top: 2rem;
+        font-size: 0.9rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .nav-buttons {
+          display: none; /* Will be replaced by a mobile menu icon later */
+        }
+        .hero h1 {
+          font-size: 3rem;
+        }
+        .menu-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ... (所有 HTML body 部分保持不变) ... -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="logo-section">
+          <img src="images/logo.jpg" alt="Logo" />
+          <span class="logo">Mochibay</span>
+        </div>
+        <div class="nav-buttons">
+          <button class="nav-btn btn-outline" onclick="showHomePage()">
+            Home
+          </button>
+          <button class="nav-btn btn-outline" onclick="showPackagesSection()">
+            Packages
+          </button>
+          <div class="cart-icon-wrapper" onclick="toggleCart()">
+            <svg
+              class="cart-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"
+              ></path>
+            </svg>
+            <div id="cart-badge" class="cart-badge">0</div>
+          </div>
+          <div id="auth-buttons" style="display: flex; gap: 1rem">
+            <button class="nav-btn btn-outline" onclick="toggleLoginModal()">
+              Login
+            </button>
+            <button class="nav-btn btn-primary" onclick="toggleRegisterModal()">
+              Register
+            </button>
+          </div>
+          <div id="user-profile" class="user-profile" style="display: none">
+            <div class="profile-trigger" onclick="toggleProfileMenu()">
+              <img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236B7280'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E"
+                alt="Profile"
+                class="profile-image"
+              />
+              <span class="profile-name"></span>
+            </div>
+            <div class="profile-menu">
+              <div class="profile-menu-item">My Profile</div>
+              <div class="profile-menu-item">Order History</div>
+              <div class="profile-menu-item" onclick="handleLogout()">
+                Logout
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="hero">
+      <h1>One Taste, You'll Want More</h1>
+      <p>Don't just listen to others, taste it to believe it.</p>
+    </div>
+    <section class="menu-section" id="preview-menu">
+      <h2 class="menu-title">Special Menu</h2>
+      <div class="menu-grid">
+        <div class="menu-item">
+          <img src="images/Snowmochi.jpeg" alt="Snowmochi" />
+          <div class="menu-item-content">
+            <h3 class="menu-item-title">Snowmochi</h3>
+            <p class="menu-item-description">
+              A sweet and chewy Japanese-inspired dessert, filled with a smooth,
+              fruity mango filling and crunchy Oreo pieces.
+            </p>
+            <p class="menu-item-price">RM 6.50</p>
+            <button class="add-to-cart" onclick="addToCart('Snowmochi', 6.50)">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <img src="images/Ribena Sprite.jpeg" alt="Ribena Sprite" />
+          <div class="menu-item-content">
+            <h3 class="menu-item-title">Ribena Sprite</h3>
+            <p class="menu-item-description">
+              A visually stunning and refreshing mocktail that combines floral,
+              fruity, and fizzy elements in one vibrant drink.
+            </p>
+            <p class="menu-item-price">RM 4.50</p>
+            <button
+              class="add-to-cart"
+              onclick="addToCart('Ribena Sprite', 4.50)"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+        <div class="menu-item">
+          <img src="images/Milkymango.jpeg" alt="Milkymango" />
+          <div class="menu-item-content">
+            <h3 class="menu-item-title">Milkymango</h3>
+            <p class="menu-item-description">
+              A visually stunning, beautiful, layered beverage that combines the
+              richness of mango and milk with butterfly pea flower.
+            </p>
+            <p class="menu-item-price">RM 6.50</p>
+            <button class="add-to-cart" onclick="addToCart('Milkymango', 6.50)">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="menu-section" id="packages-section" style="display: none">
+      <h2 class="menu-title">Our Packages</h2>
+      <div class="menu-grid" id="packages-grid"></div>
+    </section>
+    <div class="cart" id="cart">
+      <div class="cart-container">
+        <div class="cart-header">
+          <h3>Your Order</h3>
+          <button class="close-cart" onclick="toggleCart()">×</button>
+        </div>
+        <div class="cart-content">
+          <div class="cart-section">
+            <label for="class-selection" class="form-label">Class:</label>
+            <select id="class-selection" class="form-select">
+              <option value="">Select class</option>
+              <option value="gamma">Gamma</option>
+              <option value="sigma">Sigma</option>
+              <option value="delta">Delta</option>
+              <option value="zeta">Zeta</option>
+              <option value="epsilon">Epsilon</option>
+              <option value="omega">Omega</option>
+              <option value="theta">Theta</option>
+              <option value="kappa">Kappa</option>
+              <option value="beta">Beta</option>
+            </select>
+          </div>
+          <div class="cart-section">
+            <label class="form-label">Order Type:</label>
+            <div class="order-type-buttons">
+              <button
+                onclick="setOrderType('dine-in')"
+                id="dine-in-btn"
+                class="order-type-btn active"
+              >
+                Dine-In
+              </button>
+              <button
+                onclick="setOrderType('takeaway')"
+                id="takeaway-btn"
+                class="order-type-btn"
+              >
+                Takeaway
+              </button>
+            </div>
+          </div>
+          <div id="cart-items" class="cart-items"></div>
+          <div class="cart-section">
+            <label for="order-notes" class="form-label"
+              >Additional Notes:</label
+            >
+            <textarea
+              id="order-notes"
+              class="form-textarea"
+              placeholder="Add notes for your order..."
+            ></textarea>
+          </div>
+          <div class="cart-section">
+            <label class="form-label">Payment Method:</label>
+            <div class="payment-methods">
+              <div class="payment-method">
+                <input
+                  type="radio"
+                  id="cash"
+                  name="payment"
+                  value="cash"
+                  checked
+                />
+                <label for="cash">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/2331/2331717.png"
+                    alt="Cash"
+                  />
+                  <span>Cash</span>
+                </label>
+              </div>
+              <div class="payment-method">
+                <input type="radio" id="card" name="payment" value="card" />
+                <label for="card">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/1420/1420481.png"
+                    alt="Card"
+                  />
+                  <span>Credit/Debit Card</span>
+                </label>
+              </div>
+              <div class="payment-method">
+                <input
+                  type="radio"
+                  id="touch-n-go"
+                  name="payment"
+                  value="touch-n-go"
+                />
+                <label for="touch-n-go">
+                  <img src="images/tng.png" alt="Touch n Go" />
+                  <span>Touch 'n Go</span>
+                </label>
+              </div>
+              <div class="payment-method">
+                <input
+                  type="radio"
+                  id="grab-pay"
+                  name="payment"
+                  value="grab-pay"
+                />
+                <label for="grab-pay">
+                  <img src="images/grabpay.png" alt="GrabPay" />
+                  <span>GrabPay</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cart-footer">
+          <div id="cart-total" class="cart-total"></div>
+        </div>
+      </div>
+    </div>
+    <div id="login-modal" class="auth-modal">
+      <div class="auth-modal-content">
+        <button class="close-modal" onclick="toggleLoginModal()">×</button>
+        <div class="auth-header">
+          <h2>Login</h2>
+        </div>
+        <form id="login-form" onsubmit="handleLogin(event)" novalidate>
+          <div class="form-group">
+            <input type="email" id="login-email" placeholder=" " required />
+            <label for="login-email">Email</label>
+            <div class="error-message"></div>
+          </div>
+          <div class="form-group">
+            <input
+              type="password"
+              id="login-password"
+              placeholder=" "
+              required
+            />
+            <label for="login-password">Password</label>
+            <div class="error-message"></div>
+          </div>
+          <button type="submit" class="auth-button">
+            <span class="spinner"></span>
+            <span class="button-text">Login</span>
+          </button>
+        </form>
+        <p class="auth-switch">
+          Don't have an account?
+          <a href="#" onclick="switchToRegister()">Register now</a>
+        </p>
+      </div>
+    </div>
+    <div id="register-modal" class="auth-modal">
+      <div class="auth-modal-content">
+        <button class="close-modal" onclick="toggleRegisterModal()">×</button>
+        <div class="auth-header">
+          <h2>Register a New Account</h2>
+        </div>
+        <form id="register-form" onsubmit="handleRegister(event)" novalidate>
+          <div class="form-group">
+            <input type="text" id="register-name" placeholder=" " required />
+            <label for="register-name">Full Name</label>
+            <div class="error-message"></div>
+          </div>
+          <div class="form-group">
+            <input type="email" id="register-email" placeholder=" " required />
+            <label for="register-email">Email</label>
+            <div class="error-message"></div>
+          </div>
+          <div class="form-group">
+            <input type="text" id="register-class" placeholder=" " required />
+            <label for="register-class">Class</label>
+            <div class="error-message"></div>
+          </div>
+          <div class="form-group">
+            <input
+              type="tel"
+              id="register-phone"
+              placeholder=" "
+              required
+              pattern="^(\+?6?01)[0-9]{8,9}$"
+            />
+            <label for="register-phone">Phone Number</label>
+            <div class="error-message"></div>
+          </div>
+          <div class="form-group">
+            <input
+              type="password"
+              id="register-password"
+              placeholder=" "
+              required
+              minlength="6"
+            />
+            <label for="register-password">Password</label>
+            <div class="error-message"></div>
+          </div>
+          <div class="form-group">
+            <input
+              type="password"
+              id="register-confirm-password"
+              placeholder=" "
+              required
+            />
+            <label for="register-confirm-password">Confirm Password</label>
+            <div class="error-message"></div>
+          </div>
+          <button type="submit" class="auth-button">
+            <span class="spinner"></span>
+            <span class="button-text">Register</span>
+          </button>
+        </form>
+        <p class="auth-switch">
+          Already have an account?
+          <a href="#" onclick="switchToLogin()">Login</a>
+        </p>
+      </div>
+    </div>
+    <div id="register-success-modal" class="auth-modal">
+      <div class="auth-modal-content" style="text-align: center">
+        <div
+          class="register-success-icon"
+          style="
+            color: var(--secondary-color);
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+          "
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+            />
+          </svg>
+        </div>
+        <h2>Registration Successful!</h2>
+        <p>Your account has been successfully registered.</p>
+        <p>
+          You will be redirected to the login page in
+          <span id="countdown">3</span> seconds...
+        </p>
+      </div>
+    </div>
+    <div id="success-modal" class="auth-modal">
+      <div class="auth-modal-content" style="text-align: center">
+        <div
+          class="success-icon"
+          style="
+            color: var(--secondary-color);
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+          "
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+            />
+          </svg>
+        </div>
+        <h2
+          style="
+            font-family: var(--font-secondary);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+          "
+        >
+          Order Successful!
+        </h2>
+        <p>
+          Thank you! Your order <strong id="order-number"></strong> has been
+          received.
+        </p>
+        <div
+          id="order-details"
+          class="order-details"
+          style="margin-top: 1.5rem; text-align: left; font-size: 0.9rem"
+        ></div>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-about">
+          <h3>Mochibay</h3>
+          <p>
+            Serving authentic Malaysian dishes with an unforgettable taste. Come
+            and enjoy a cozy atmosphere and delicious food.
+          </p>
+        </div>
+        <div class="footer-links">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="#" onclick="showHomePage()">Home</a></li>
+            <li><a href="#" onclick="showPackagesSection()">Packages</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <h3>Contact Us</h3>
+          <p>123 Delicious Street, 50480 Kuala Lumpur</p>
+          <p>Email: info@mochibay.com</p>
+          <p>Phone: +60 3-1234 5678</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Mochibay. All Rights Reserved.</p>
+      </div>
+    </footer>
+
+    <script>
+      let cartItems = [];
+      let isCartOpen = false;
+      let orderType = "dine-in";
+      const TAX_RATE = 0.06;
+
+      const API_URL = "http://localhost:3000";
+
+      // --- PRICE UPDATED HERE ---
+      const packages = [
+        {
+          name: "Mochi + Ribena Sprite Package",
+          price: 10.0,
+          description:
+            "Enjoy our delicious Snowmochi paired with a refreshing Ribena Sprite!",
+          image: "images/Mochi Ribena Sprite Package.jpeg",
+        },
+        {
+          name: "Mochi + Milkymango Package",
+          price: 11.0,
+          description:
+            "A sweet combination of Snowmochi and our creamy Milkymango drink.",
+          image: "images/Mochi Milkymango Package.jpeg",
+        },
+        {
+          name: "Mochi 2box",
+          price: 12.0, // <-- PRICE CHANGED TO 12.0
+          description:
+            "Get a great deal with two boxes of our signature Snowmochi.",
+          image: "images/Snowmochi.jpeg",
+        },
+      ];
+      let packagesRendered = false;
+
+      function updatePaymentOptions() {
+        const today = new Date().getDay(); // 0=Sunday, 1=Monday, 2=Tuesday, 3=Wednesday
+        const cashRadio = document.getElementById("cash");
+        const cashLabel = cashRadio.nextElementSibling;
+        const cashContainer = cashRadio.parentElement;
+
+        let cashMessage = "";
+
+        cashRadio.disabled = false;
+        cashContainer.style.opacity = "1";
+        cashContainer.style.cursor = "pointer";
+
+        if (today === 2) {
+          // Tuesday
+          cashMessage = " (Pre-order Day: Please pay on the day)";
+        } else if (today === 3) {
+          // Wednesday
+          cashMessage = " (On-site Payment Day)";
+        } else {
+          cashMessage = " (Cash payment available only on Tue/Wed)";
+        }
+
+        cashLabel.querySelector("span").textContent = `Cash${cashMessage}`;
+      }
+
+      function toggleCart() {
+        const cart = document.getElementById("cart");
+        isCartOpen = !isCartOpen;
+        cart.style.display = isCartOpen ? "flex" : "none";
+        if (isCartOpen) {
+          updatePaymentOptions();
+        }
+      }
+
+      async function processOrder() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          alert("Please log in to place an order.");
+          toggleCart();
+          toggleLoginModal();
+          return;
+        }
+
+        const classSelection = document.getElementById("class-selection").value;
+        if (!classSelection) {
+          alert("Please select a class.");
+          return;
+        }
+        if (cartItems.length === 0) {
+          alert("Your cart is empty. Please add items.");
+          return;
+        }
+        const paymentMethod = document.querySelector(
+          'input[name="payment"]:checked'
+        );
+        if (!paymentMethod) {
+          alert("Please select a payment method.");
+          return;
+        }
+
+        const subtotal = cartItems.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
+        );
+        const total = subtotal * (1 + TAX_RATE);
+
+        let finalNotes = document.getElementById("order-notes").value;
+        const today = new Date().getDay();
+        if (paymentMethod.value === "cash" && today !== 2 && today !== 3) {
+          const userConfirmation = confirm(
+            "You have selected Cash payment on a non-business day. This order will be marked for special attention. Do you want to proceed?"
+          );
+          if (!userConfirmation) {
+            return;
+          }
+          const adminNote =
+            "[Admin Note: Cash payment selected on a non-business day.]\n";
+          finalNotes = adminNote + finalNotes;
+        }
+
+        const orderData = {
+          orderNumber: generateOrderNumber(),
+          orderType: orderType,
+          class: classSelection,
+          items: cartItems,
+          notes: finalNotes,
+          total: total,
+          paymentMethod: paymentMethod.value,
+        };
+
+        if (
+          paymentMethod.value === "touch-n-go" ||
+          paymentMethod.value === "grab-pay" ||
+          paymentMethod.value === "card"
+        ) {
+          sessionStorage.setItem("pendingOrder", JSON.stringify(orderData));
+          window.location.href = "payment.html";
+        } else {
+          submitOrder(orderData, token);
+        }
+      }
+
+      async function submitOrder(orderData, token) {
+        try {
+          const finalOrderData = {
+            ...orderData,
+            total: orderData.total.toFixed(2),
+          };
+
+          const response = await fetch(`${API_URL}/api/orders`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(finalOrderData),
+          });
+
+          const result = await response.json();
+          if (!response.ok) {
+            throw new Error(result.message || "Failed to place order.");
+          }
+
+          const summary = {
+            ...orderData,
+            subtotal: cartItems.reduce(
+              (sum, item) => sum + item.price * item.quantity,
+              0
+            ),
+            tax:
+              cartItems.reduce(
+                (sum, item) => sum + item.price * item.quantity,
+                0
+              ) * TAX_RATE,
+          };
+          showSuccessModal(summary);
+
+          cartItems = [];
+          document.getElementById("class-selection").value = "";
+          document.getElementById("order-notes").value = "";
+          updateCart();
+          setTimeout(toggleCart, 300);
+        } catch (error) {
+          console.error("Order processing error:", error);
+          alert(`Error: ${error.message}`);
+        }
+      }
+
+      function showSuccessModal(summary) {
+        document.getElementById("order-number").textContent =
+          summary.orderNumber;
+        const detailsDiv = document.getElementById("order-details");
+
+        let detailsHTML = `
+              <div style="margin-bottom: 1rem;"><strong>Order Type:</strong> ${
+                summary.orderType === "dine-in" ? "Dine-In" : "Takeaway"
+              }</div>
+              <div style="margin-bottom: 1rem;"><strong>Class:</strong> ${
+                summary.class
+              }</div>
+              <div style="margin-bottom: 0.5rem;"><strong>Items:</strong></div>
+          `;
+        summary.items.forEach((item) => {
+          detailsHTML += `<div style="padding-left: 1rem;">${item.name} x ${
+            item.quantity
+          } = RM ${(item.price * item.quantity).toFixed(2)}</div>`;
+        });
+        detailsHTML += `
+              <div style="margin-top: 1rem; border-top: 1px solid #eee; padding-top: 1rem;">
+                  <div><strong>Subtotal:</strong> RM ${summary.subtotal.toFixed(
+                    2
+                  )}</div>
+                  <div><strong>Tax (6%):</strong> RM ${summary.tax.toFixed(
+                    2
+                  )}</div>
+                  <div style="font-weight: bold; margin-top: 0.5rem;"><strong>Total:</strong> RM ${summary.total.toFixed(
+                    2
+                  )}</div>
+              </div>
+              <div style="margin-top: 1rem;"><strong>Payment Method:</strong> ${
+                summary.paymentMethod
+              }</div>
+          `;
+        detailsDiv.innerHTML = detailsHTML;
+
+        const modal = document.getElementById("success-modal");
+        modal.classList.add("show");
+
+        const closeTimeout = setTimeout(() => {
+          if (modal.classList.contains("show")) {
+            modal.classList.remove("show");
+          }
+        }, 5000);
+
+        modal.addEventListener(
+          "click",
+          function (e) {
+            if (e.target === modal || e.target.closest(".close-modal")) {
+              modal.classList.remove("show");
+              clearTimeout(closeTimeout);
+            }
+          },
+          { once: true }
+        );
+      }
+
+      function setOrderType(type) {
+        orderType = type;
+        document
+          .getElementById("dine-in-btn")
+          .classList.toggle("active", type === "dine-in");
+        document
+          .getElementById("takeaway-btn")
+          .classList.toggle("active", type === "takeaway");
+        updateCart();
+      }
+
+      function addToCart(name, price) {
+        const existingItem = cartItems.find((item) => item.name === name);
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cartItems.push({ name, price, quantity: 1, notes: "" });
+        }
+        updateCart();
+        const addToCartButtons = document.querySelectorAll(".add-to-cart");
+        addToCartButtons.forEach((button) => {
+          if (button.onclick.toString().includes(`'${name}'`)) {
+            const originalText = button.textContent;
+            const originalBg = button.style.backgroundColor;
+            button.textContent = "Added!";
+            button.style.backgroundColor = "#388E3C";
+            setTimeout(() => {
+              button.textContent = originalText;
+              button.style.backgroundColor =
+                originalBg || "var(--secondary-color)";
+            }, 1000);
+          }
+        });
+      }
+
+      function updateItemQuantity(index, change) {
+        cartItems[index].quantity += change;
+        if (cartItems[index].quantity <= 0) {
+          cartItems.splice(index, 1);
+        }
+        updateCart();
+      }
+
+      function generateOrderNumber() {
+        const date = new Date();
+        return `MB${date.getFullYear().toString().slice(-2)}${(
+          date.getMonth() + 1
+        )
+          .toString()
+          .padStart(2, "0")}${date
+          .getDate()
+          .toString()
+          .padStart(2, "0")}${Math.floor(Math.random() * 1000)
+          .toString()
+          .padStart(3, "0")}`;
+      }
+
+      function updateCart() {
+        const cartBadge = document.getElementById("cart-badge");
+        const totalQuantity = cartItems.reduce(
+          (sum, item) => sum + item.quantity,
+          0
+        );
+
+        if (cartBadge) {
+          cartBadge.textContent = totalQuantity;
+        }
+
+        const cartItemsDiv = document.getElementById("cart-items");
+        const cartTotalDiv = document.getElementById("cart-total");
+
+        if (!cartItemsDiv || !cartTotalDiv) return;
+
+        cartItemsDiv.innerHTML =
+          cartItems.length === 0
+            ? '<p style="text-align: center; color: #888; padding: 2rem 0;">Your cart is empty.</p>'
+            : "";
+
+        cartItems.forEach((item, index) => {
+          const itemDiv = document.createElement("div");
+          itemDiv.className = "cart-item-row";
+          itemDiv.style.cssText = `display: flex; align-items: center; padding: 1.5rem 0; border-bottom: 1px solid var(--border-color);`;
+          itemDiv.innerHTML = `
+                  <img src="${getItemImage(item.name)}" alt="${
+            item.name
+          }" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; margin-right: 1rem;">
+                  <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                      <div style="font-weight: 600; margin-bottom: 0.5rem;">${
+                        item.name
+                      }</div>
+                      <div class="quantity-controls">
+                          <button onclick="updateItemQuantity(${index}, -1)" class="quantity-btn">-</button>
+                          <span class="quantity-display">${item.quantity}</span>
+                          <button onclick="updateItemQuantity(${index}, 1)" class="quantity-btn">+</button>
+                      </div>
+                  </div>
+                  <div style="text-align: right;">
+                      <div style="font-weight: 600; font-size: 1.1rem;">RM ${(
+                        item.price * item.quantity
+                      ).toFixed(2)}</div>
+                  </div>
+              `;
+          cartItemsDiv.appendChild(itemDiv);
+        });
+
+        const subtotal = cartItems.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
+        );
+        const tax = subtotal * TAX_RATE;
+        const total = subtotal + tax;
+
+        cartTotalDiv.innerHTML = `
+                <div style="margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; opacity: 0.8;"><span>Subtotal:</span><span>RM ${subtotal.toFixed(
+                      2
+                    )}</span></div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; opacity: 0.8;"><span>Tax (6%):</span><span>RM ${tax.toFixed(
+                      2
+                    )}</span></div>
+                    <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2rem; color: var(--heading-color);"><span>Total:</span><span>RM ${total.toFixed(
+                      2
+                    )}</span></div>
+                </div>
+                <button onclick="processOrder()" class="btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; border-radius: 8px;">Place Order</button>
+            `;
+      }
+
+      function getItemImage(itemName) {
+        const imageMap = {
+          Snowmochi: "images/Snowmochi.jpeg",
+          "Ribena Sprite": "images/Ribena Sprite.jpeg",
+          Milkymango: "images/Milkymango.jpeg",
+          "Mochi + Ribena Sprite Package":
+            "images/Mochi Ribena Sprite Package.jpeg",
+          "Mochi + Milkymango Package": "images/Mochi Milkymango Package.jpeg",
+          "Mochi 2box": "images/Snowmochi.jpeg",
+        };
+        return imageMap[itemName] || "https://via.placeholder.com/60";
+      }
+
+      function renderPackages() {
+        const packagesGrid = document.getElementById("packages-grid");
+        if (!packagesGrid || packagesRendered) return;
+
+        packagesGrid.innerHTML = "";
+        packages.forEach((pkg) => {
+          const packageItem = document.createElement("div");
+          packageItem.className = "menu-item";
+          packageItem.innerHTML = `
+                <img src="${pkg.image}" alt="${pkg.name}" />
+                <div class="menu-item-content">
+                  <h3 class="menu-item-title">${pkg.name}</h3>
+                  <p class="menu-item-description">${pkg.description}</p>
+                  <p class="menu-item-price">RM ${pkg.price.toFixed(2)}</p>
+                  <button class="add-to-cart" onclick="addToCart('${pkg.name.replace(
+                    /'/g,
+                    "\\'"
+                  )}', ${pkg.price})">
+                    Add to Cart
+                  </button>
+                </div>
+              `;
+          packagesGrid.appendChild(packageItem);
+        });
+        packagesRendered = true;
+      }
+
+      function showHomePage() {
+        document.getElementById("preview-menu").style.display = "block";
+        document.getElementById("packages-section").style.display = "none";
+        document
+          .getElementById("preview-menu")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+
+      function showPackagesSection() {
+        document.getElementById("preview-menu").style.display = "none";
+        document.getElementById("packages-section").style.display = "block";
+        renderPackages();
+        document
+          .getElementById("packages-section")
+          .scrollIntoView({ behavior: "smooth" });
+      }
+
+      function toggleLoginModal() {
+        document.getElementById("login-modal").classList.toggle("show");
+      }
+
+      function toggleRegisterModal() {
+        document.getElementById("register-modal").classList.toggle("show");
+      }
+
+      function switchToRegister() {
+        toggleLoginModal();
+        setTimeout(toggleRegisterModal, 300);
+      }
+
+      function switchToLogin() {
+        toggleRegisterModal();
+        setTimeout(toggleLoginModal, 300);
+      }
+
+      function showError(input, message) {
+        const formGroup = input.parentElement;
+        formGroup.classList.add("error");
+        const errorDiv = formGroup.querySelector(".error-message");
+        errorDiv.textContent = message;
+      }
+
+      function clearError(input) {
+        const formGroup = input.parentElement;
+        formGroup.classList.remove("error");
+        const errorDiv = formGroup.querySelector(".error-message");
+        errorDiv.textContent = "";
+      }
+
+      function clearAllErrors(form) {
+        form.querySelectorAll(".error").forEach((group) => {
+          group.classList.remove("error");
+          group.querySelector(".error-message").textContent = "";
+        });
+      }
+
+      async function handleLogin(event) {
+        event.preventDefault();
+        const form = event.target;
+        const button = form.querySelector(".auth-button");
+        const email = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
+
+        button.classList.add("loading");
+
+        try {
+          const response = await fetch(`${API_URL}/api/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+          });
+          const data = await response.json();
+          if (data.token) {
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("userName", data.name);
+            updateUserInterface();
+            toggleLoginModal();
+          } else {
+            alert(data.message || "Login failed.");
+          }
+        } catch (err) {
+          console.error(err);
+          alert("An error occurred during login.");
+        } finally {
+          button.classList.remove("loading");
+        }
+      }
+
+      function handleLogout() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userName");
+        updateUserInterface();
+        document.querySelector(".profile-menu").classList.remove("show");
+      }
+
+      function updateUserInterface() {
+        const authButtons = document.getElementById("auth-buttons");
+        const userProfile = document.getElementById("user-profile");
+        const profileName = userProfile.querySelector(".profile-name");
+        const token = localStorage.getItem("token");
+        const userName = localStorage.getItem("userName");
+
+        if (token && userName) {
+          authButtons.style.display = "none";
+          userProfile.style.display = "flex";
+          profileName.textContent = userName;
+        } else {
+          authButtons.style.display = "flex";
+          userProfile.style.display = "none";
+        }
+      }
+
+      function toggleProfileMenu() {
+        document.querySelector(".profile-menu").classList.toggle("show");
+      }
+
+      async function handleRegister(event) {
+        event.preventDefault();
+        const form = event.target;
+        const button = form.querySelector(".auth-button");
+        clearAllErrors(form);
+
+        const nameInput = document.getElementById("register-name");
+        const emailInput = document.getElementById("register-email");
+        const classInput = document.getElementById("register-class");
+        const phoneInput = document.getElementById("register-phone");
+        const passwordInput = document.getElementById("register-password");
+        const confirmPasswordInput = document.getElementById(
+          "register-confirm-password"
+        );
+
+        let isValid = true;
+        if (nameInput.value.trim() === "") {
+          showError(nameInput, "Full name is required.");
+          isValid = false;
+        }
+        if (!emailInput.value.includes("@")) {
+          showError(emailInput, "Please enter a valid email address.");
+          isValid = false;
+        }
+        if (classInput.value.trim() === "") {
+          showError(classInput, "Class is required.");
+          isValid = false;
+        }
+        if (!phoneInput.checkValidity() || phoneInput.value.trim() === "") {
+          showError(
+            phoneInput,
+            "A valid phone number is required (e.g., 0123456789)."
+          );
+          isValid = false;
+        }
+        if (passwordInput.value.length < 6) {
+          showError(passwordInput, "Password must be at least 6 characters.");
+          isValid = false;
+        }
+        if (passwordInput.value !== confirmPasswordInput.value) {
+          showError(confirmPasswordInput, "Passwords do not match.");
+          isValid = false;
+        }
+        if (!isValid) return;
+
+        button.classList.add("loading");
+        const userData = {
+          name: nameInput.value,
+          email: emailInput.value,
+          user_class: classInput.value,
+          phone: phoneInput.value,
+          password: passwordInput.value,
+        };
+
+        try {
+          const response = await fetch(`${API_URL}/api/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(userData),
+          });
+          const body = await response.json();
+          if (response.status === 201) {
+            toggleRegisterModal();
+            const successModal = document.getElementById(
+              "register-success-modal"
+            );
+            successModal.classList.add("show");
+            let countdown = 3;
+            const countdownSpan = document.getElementById("countdown");
+            countdownSpan.textContent = countdown;
+            const interval = setInterval(() => {
+              countdown--;
+              countdownSpan.textContent = countdown;
+              if (countdown <= 0) {
+                clearInterval(interval);
+                successModal.classList.remove("show");
+                setTimeout(toggleLoginModal, 300);
+              }
+            }, 1000);
+          } else {
+            alert(body.message || "Registration failed.");
+          }
+        } catch (err) {
+          console.error(err);
+          alert("An error occurred during registration.");
+        } finally {
+          button.classList.remove("loading");
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        updateUserInterface();
+        updateCart();
+        document.addEventListener("click", function (e) {
+          const profileMenu = document.querySelector(".profile-menu");
+          const profileTrigger = document.querySelector(".profile-trigger");
+          if (
+            profileMenu &&
+            profileMenu.classList.contains("show") &&
+            !profileTrigger.contains(e.target) &&
+            !profileMenu.contains(e.target)
+          ) {
+            profileMenu.classList.remove("show");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

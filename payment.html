@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Complete Payment</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-color: #bcaaa4;
+        --primary-color-dark: #8d7b71;
+        --secondary-color: #66bb6a;
+        --background-color: #f5f5f5;
+        --surface-color: #ffffff;
+        --text-color: #5d4037;
+        --heading-color: #3e2723;
+        --border-color: #e0e0e0;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: var(--background-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 2rem;
+      }
+      .payment-container {
+        background-color: var(--surface-color);
+        padding: 2.5rem;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 450px;
+        width: 100%;
+      }
+      h1 {
+        color: var(--heading-color);
+        margin-bottom: 0.5rem;
+      }
+      .payment-method-title {
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+      }
+      .order-total {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--secondary-color);
+        margin-bottom: 1.5rem;
+      }
+      #qr-code {
+        width: 250px;
+        height: 250px;
+        margin: 1rem auto;
+        border: 1px solid var(--border-color);
+        padding: 10px;
+        border-radius: 8px;
+      }
+      .upload-section {
+        margin-top: 1.5rem;
+        border-top: 1px dashed var(--border-color);
+        padding-top: 1.5rem;
+      }
+      label {
+        display: block;
+        margin-bottom: 0.75rem;
+        font-weight: 500;
+        color: var(--heading-color);
+      }
+      input[type="file"] {
+        display: none;
+      }
+      .upload-label {
+        display: inline-block;
+        padding: 0.8rem 1.5rem;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .upload-label:hover {
+        background-color: var(--primary-color-dark);
+      }
+      #file-name {
+        margin-top: 0.5rem;
+        font-style: italic;
+        color: #888;
+        min-height: 1.2em;
+      }
+      #confirm-button {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        background-color: var(--secondary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 1.5rem;
+        transition: background-color 0.3s;
+      }
+      #confirm-button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+      #back-link {
+        display: block;
+        margin-top: 1.5rem;
+        color: var(--primary-color);
+        text-decoration: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="payment-container">
+      <h1>Scan to Pay</h1>
+      <p class="payment-method-title">
+        Using <strong id="payment-method-name">your selected method</strong>
+      </p>
+      <div id="order-total" class="order-total">RM 0.00</div>
+
+      <img id="qr-code" src="images/qr code.jpeg" alt="Payment QR Code" />
+
+      <div class="upload-section">
+        <label for="receipt-upload">Upload Your Payment Receipt</label>
+        <label for="receipt-upload" class="upload-label">Choose File</label>
+        <input type="file" id="receipt-upload" accept="image/*" />
+        <div id="file-name">No file chosen</div>
+      </div>
+
+      <button id="confirm-button" disabled>Confirm & Place Order</button>
+      <a id="back-link" onclick="window.history.back()">Cancel and go back</a>
+    </div>
+
+    <script>
+      const confirmButton = document.getElementById("confirm-button");
+      const receiptUpload = document.getElementById("receipt-upload");
+      const fileNameDisplay = document.getElementById("file-name");
+      const paymentMethodNameDisplay = document.getElementById(
+        "payment-method-name"
+      );
+      const API_URL = "http://localhost:3000";
+      const orderData = JSON.parse(sessionStorage.getItem("pendingOrder"));
+
+      if (!orderData) {
+        alert("No pending order found. Returning to main page.");
+        window.location.href = "code (7).html";
+      } else {
+        document.getElementById(
+          "order-total"
+        ).textContent = `RM ${orderData.total.toFixed(2)}`;
+        let paymentName = orderData.paymentMethod
+          .replace(/-/g, " ")
+          .replace(/\b\w/g, (l) => l.toUpperCase());
+        paymentMethodNameDisplay.textContent = paymentName;
+      }
+
+      receiptUpload.addEventListener("change", () => {
+        if (receiptUpload.files.length > 0) {
+          fileNameDisplay.textContent = receiptUpload.files[0].name;
+          confirmButton.disabled = false;
+        } else {
+          fileNameDisplay.textContent = "No file chosen";
+          confirmButton.disabled = true;
+        }
+      });
+
+      confirmButton.addEventListener("click", async () => {
+        if (!receiptUpload.files || receiptUpload.files.length === 0) {
+          alert("Please upload your payment receipt.");
+          return;
+        }
+        const token = localStorage.getItem("token");
+        if (!token) {
+          alert("Your session has expired. Please log in again.");
+          window.location.href = "code (7).html";
+          return;
+        }
+        confirmButton.disabled = true;
+        confirmButton.textContent = "Processing...";
+
+        const formData = new FormData();
+        formData.append("orderNumber", orderData.orderNumber);
+        formData.append("orderType", orderData.orderType);
+        formData.append("class", orderData.class);
+        formData.append("items", JSON.stringify(orderData.items));
+        formData.append("notes", orderData.notes);
+        formData.append("total", orderData.total.toFixed(2));
+        formData.append("paymentMethod", orderData.paymentMethod);
+        formData.append("receipt", receiptUpload.files[0]);
+
+        try {
+          const response = await fetch(`${API_URL}/api/orders`, {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+          });
+
+          if (!response.ok) {
+            const result = await response.json();
+            throw new Error(result.message || "Failed to place order.");
+          }
+
+          sessionStorage.removeItem("pendingOrder");
+          alert("Order placed successfully! Thank you for your payment.");
+          window.location.href = "code (7).html";
+        } catch (error) {
+          console.error("Order confirmation error:", error);
+          alert(`Error: ${error.message}`);
+          confirmButton.disabled = false;
+          confirmButton.textContent = "Confirm & Place Order";
+        }
+      });
+    </script>
+  </body>
+</html>
