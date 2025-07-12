@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-  <!-- ... (你的 head 部分保持不变) ... -->
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -215,13 +214,12 @@
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
       }
 
-      /* --- FINAL IMAGE STYLE FIX --- */
       .menu-item img {
         width: 100%;
-        height: 180px; /* A more balanced height */
-        object-fit: contain; /* This will fit the entire image inside, without cropping */
-        background-color: #f8f9fa; /* A very light background for any empty space */
-        padding: 10px; /* Add some padding around the contained image */
+        height: 180px;
+        object-fit: contain;
+        background-color: #f8f9fa;
+        padding: 10px;
       }
 
       .menu-item-content {
@@ -768,76 +766,177 @@
         font-size: 0.9rem;
       }
 
-      /* Responsive */
-      @media (max-width: 768px) {
-        .nav-buttons {
-          display: none; /* Will be replaced by a mobile menu icon later */
+      /* --- START: NEW RESPONSIVE STYLES --- */
+
+      /* Mobile Menu Icon Styling (The Hamburger) */
+      .mobile-menu-icon {
+        display: none; /* Hidden by default on large screens */
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--heading-color); /* Give it a color */
+      }
+      
+      /* Wrapper for the navigation buttons to control its visibility and layout */
+      .nav-buttons-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      /* Responsive adjustments using Media Queries */
+      @media (max-width: 992px) {
+        .navbar-container {
+            position: relative; /* Needed for positioning the dropdown */
         }
+        
+        .nav-buttons-wrapper {
+          display: none; /* Hide the nav links container by default on mobile */
+          position: absolute;
+          top: 100%;
+          right: 0;
+          background: var(--surface-color);
+          width: 250px;
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+          border-radius: 8px;
+          margin-top: 1rem;
+          padding: 1rem;
+          flex-direction: column;
+          align-items: stretch; /* Make items take full width */
+          gap: 1rem;
+        }
+        
+        /* This class will be toggled by JavaScript to show the menu */
+        .nav-buttons-wrapper.show {
+          display: flex;
+        }
+
+        .nav-buttons {
+          flex-direction: column;
+          align-items: stretch;
+          width: 100%;
+          gap: 1rem; /* Adjust gap for vertical layout */
+        }
+        
+        #auth-buttons, .user-profile {
+            flex-direction: column;
+            display: flex !important; /* Ensure it's always flex for stacking */
+            gap: 1rem;
+        }
+        
+        .nav-btn {
+            text-align: center;
+        }
+
+        .mobile-menu-icon {
+          display: block; /* Show the hamburger icon on mobile */
+        }
+
         .hero h1 {
           font-size: 3rem;
         }
+        
         .menu-grid {
           grid-template-columns: 1fr;
         }
+        
+        .footer-container {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
       }
+
+      @media (max-width: 768px) {
+        /* Further adjustments for smaller phones */
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+        .hero p {
+            font-size: 1rem;
+        }
+        /* Hide the original nav buttons completely to rely on the wrapper */
+        .nav-buttons {
+           display: none;
+        }
+        /* Exception: Show nav-buttons when it is inside the wrapper that has the 'show' class */
+        .nav-buttons-wrapper.show .nav-buttons {
+            display: flex;
+        }
+      }
+      /* --- END: NEW RESPONSIVE STYLES --- */
+
     </style>
   </head>
   <body>
-    <!-- ... (所有 HTML body 部分保持不变) ... -->
+    <!-- START: MODIFIED RESPONSIVE NAVBAR -->
     <nav class="navbar">
       <div class="navbar-container">
         <div class="logo-section">
           <img src="images/logo.jpg" alt="Logo" />
           <span class="logo">Mochibay</span>
         </div>
-        <div class="nav-buttons">
-          <button class="nav-btn btn-outline" onclick="showHomePage()">
-            Home
-          </button>
-          <button class="nav-btn btn-outline" onclick="showPackagesSection()">
-            Packages
-          </button>
-          <div class="cart-icon-wrapper" onclick="toggleCart()">
-            <svg
-              class="cart-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
-              <path
-                d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"
-              ></path>
-            </svg>
-            <div id="cart-badge" class="cart-badge">0</div>
-          </div>
-          <div id="auth-buttons" style="display: flex; gap: 1rem">
-            <button class="nav-btn btn-outline" onclick="toggleLoginModal()">
-              Login
+
+        <!-- Mobile Menu Icon (Hamburger) -->
+        <button class="mobile-menu-icon" id="mobile-menu-toggle">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="30px" height="30px">
+            <path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"></path>
+          </svg>
+        </button>
+
+        <!-- Nav Buttons container that will be toggled -->
+        <div class="nav-buttons-wrapper" id="nav-links">
+          <div class="nav-buttons">
+            <button class="nav-btn btn-outline" onclick="showHomePage()">
+              Home
             </button>
-            <button class="nav-btn btn-primary" onclick="toggleRegisterModal()">
-              Register
+            <button class="nav-btn btn-outline" onclick="showPackagesSection()">
+              Packages
             </button>
-          </div>
-          <div id="user-profile" class="user-profile" style="display: none">
-            <div class="profile-trigger" onclick="toggleProfileMenu()">
-              <img
-                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236B7280'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E"
-                alt="Profile"
-                class="profile-image"
-              />
-              <span class="profile-name"></span>
+            <div class="cart-icon-wrapper" onclick="toggleCart()">
+              <svg
+                class="cart-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"
+                ></path>
+              </svg>
+              <div id="cart-badge" class="cart-badge">0</div>
             </div>
-            <div class="profile-menu">
-              <div class="profile-menu-item">My Profile</div>
-              <div class="profile-menu-item">Order History</div>
-              <div class="profile-menu-item" onclick="handleLogout()">
-                Logout
+            <div id="auth-buttons" style="display: flex; gap: 1rem">
+              <button class="nav-btn btn-outline" onclick="toggleLoginModal()">
+                Login
+              </button>
+              <button class="nav-btn btn-primary" onclick="toggleRegisterModal()">
+                Register
+              </button>
+            </div>
+            <div id="user-profile" class="user-profile" style="display: none">
+              <div class="profile-trigger" onclick="toggleProfileMenu()">
+                <img
+                  src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236B7280'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E"
+                  alt="Profile"
+                  class="profile-image"
+                />
+                <span class="profile-name"></span>
+              </div>
+              <div class="profile-menu">
+                <div class="profile-menu-item">My Profile</div>
+                <div class="profile-menu-item">Order History</div>
+                <div class="profile-menu-item" onclick="handleLogout()">
+                  Logout
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </nav>
+    <!-- END: MODIFIED RESPONSIVE NAVBAR -->
+
+    <!-- ... (The rest of your HTML body remains exactly the same) ... -->
     <div class="hero">
       <h1>One Taste, You'll Want More</h1>
       <p>Don't just listen to others, taste it to believe it.</p>
@@ -1195,7 +1294,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2024 Mochibay. All Rights Reserved.</p>
+        <p>© 2024 Mochibay. All Rights Reserved.</p>
       </div>
     </footer>
 
@@ -1207,7 +1306,6 @@
 
       const API_URL = "https://mochibay-backend.onrender.com";
 
-      // --- PRICE UPDATED HERE ---
       const packages = [
         {
           name: "Mochi + Ribena Sprite Package",
@@ -1225,7 +1323,7 @@
         },
         {
           name: "Mochi 2box",
-          price: 12.0, // <-- PRICE CHANGED TO 12.0
+          price: 12.0,
           description:
             "Get a great deal with two boxes of our signature Snowmochi.",
           image: "images/Snowmochi.jpeg",
@@ -1814,8 +1912,32 @@
       }
 
       document.addEventListener("DOMContentLoaded", function () {
+        // --- START: NEW MOBILE MENU SCRIPT ---
+        const menuToggle = document.getElementById("mobile-menu-toggle");
+        const navLinks = document.getElementById("nav-links");
+
+        if (menuToggle && navLinks) {
+          menuToggle.addEventListener("click", function () {
+            navLinks.classList.toggle("show");
+          });
+        }
+
+        // Close the mobile menu if clicked outside of it
+        document.addEventListener('click', function(event) {
+          const isClickInsideNav = navLinks.contains(event.target);
+          const isClickOnToggle = menuToggle.contains(event.target);
+
+          if (!isClickInsideNav && !isClickOnToggle && navLinks.classList.contains('show')) {
+            navLinks.classList.remove('show');
+          }
+        });
+        // --- END: NEW MOBILE MENU SCRIPT ---
+
+        // Existing scripts from your file
         updateUserInterface();
         updateCart();
+        
+        // This part handles closing the user profile menu, which is separate
         document.addEventListener("click", function (e) {
           const profileMenu = document.querySelector(".profile-menu");
           const profileTrigger = document.querySelector(".profile-trigger");
